@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Application.Commands.Tasks.CreateTask;
 
-public class CreateTaskCommand
-{
-
-}
+public sealed record CreateTaskCommand(
+    Guid UserId,
+    string Title,
+    string Description,
+    DateTime DueDate);

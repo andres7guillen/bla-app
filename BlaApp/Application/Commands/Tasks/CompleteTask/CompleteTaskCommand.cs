@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Application.Commands.Tasks.CompleteTask;
 
-namespace Application.Commands.Tasks.CompleteTask
-{
-    internal class CompleteTaskCommand
-    {
-    }
-}
+public sealed record CompleteTaskCommand(
+    Guid TaskId,
+    Guid UserId);

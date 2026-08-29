@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Application.Commands.Tasks.CancelTask;
 
-namespace Application.Commands.Tasks.CancelTask
-{
-    internal class CancelTaskCommand
-    {
-    }
-}
+public sealed record CancelTaskCommand(
+Guid TaskId,
+Guid UserId);

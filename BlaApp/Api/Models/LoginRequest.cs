@@ -1,6 +1,5 @@
-﻿namespace Api.Models
-{
-    public class LoginRequest
-    {
-    }
-}
+﻿namespace Api.Models;
+
+public sealed record LoginRequest(
+    string Email,
+    string Password);

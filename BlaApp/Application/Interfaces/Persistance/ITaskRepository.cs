@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CSharpFunctionalExtensions;
+using Domain.Entities;
 
 namespace Application.Interfaces.Persistance;
 
-internal interface ITaskRepository
+public interface ITaskRepository
 {
+    Task<Maybe<TaskItem>> GetByIdAsync(Guid id,CancellationToken cancellationToken);
+
+    Task AddAsync(TaskItem task,CancellationToken cancellationToken);
+
+    void Remove(TaskItem task);
 }
