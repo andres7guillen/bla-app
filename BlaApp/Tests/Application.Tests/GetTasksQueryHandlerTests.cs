@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Commands.Authentication.Register
+namespace Tests.Application.Tests
 {
-    internal class RegisterCommand
+    internal class GetTasksQueryHandlerTests
     {
     }
 }

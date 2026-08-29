@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Application.Commands.Tasks.UpdateTask;
 
-namespace Application.Commands.Tasks.UpdateTask
-{
-    internal class UpdateTaskCommand
-    {
-    }
-}
+public sealed record UpdateTaskCommand(
+    Guid TaskId,
+    Guid UserId,
+    string Title,
+    string Description,
+    DateTime DueDate);

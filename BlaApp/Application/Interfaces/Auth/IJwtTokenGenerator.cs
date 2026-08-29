@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Application.Interfaces.Auth;
 
-namespace Application.Interfaces.Auth;
-
-internal interface IJwtTokenGenerator
+public interface IJwtTokenGenerator
 {
-
+    string GenerateToken(
+        Guid userId,
+        string email);
 }

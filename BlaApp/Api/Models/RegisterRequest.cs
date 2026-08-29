@@ -1,6 +1,5 @@
-﻿namespace Api.Models
-{
-    public class RegisterRequest
-    {
-    }
-}
+﻿namespace Api.Models;
+
+public sealed record RegisterRequest(
+    string Email,
+    string Password);
