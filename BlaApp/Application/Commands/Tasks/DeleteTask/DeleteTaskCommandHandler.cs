@@ -1,18 +1,21 @@
 ﻿using Application.Interfaces.Persistance;
 using CSharpFunctionalExtensions;
+using MediatR;
 
 namespace Application.Commands.Tasks.DeleteTask;
 
 public sealed class DeleteTaskCommandHandler
+    : IRequestHandler<DeleteTaskCommand, Result>
 {
     private readonly ITaskRepository _repository;
-    private readonly ICurrentUser _currentUser;
+    private readonly IApplicationDbContext _context;
+
     public DeleteTaskCommandHandler(
         ITaskRepository repository,
-        ICurrentUser currentUser)
+        IApplicationDbContext context)
     {
         _repository = repository;
-        _currentUser = currentUser;
+        _context = context;
     }
 
     public async Task<Result> Handle(
@@ -23,13 +26,16 @@ public sealed class DeleteTaskCommandHandler
             command.TaskId,
             cancellationToken);
 
-        if (task.Value is null ||
-            task.Value.UserId != _currentUser.UserId)
+        if (task.Value is null)
         {
-            return Result.Failure("Task not found.");
+            return Result.Failure(
+                "Task not found.");
         }
 
         _repository.Remove(task.Value);
+
+        await _context.SaveChangesAsync(
+            cancellationToken);
 
         return Result.Success();
     }
