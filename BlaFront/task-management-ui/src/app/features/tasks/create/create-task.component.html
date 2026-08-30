@@ -1,0 +1,31 @@
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h2>Create Task</h2>
+            <form [formGroup]="form" (ngSubmit)="save()"> <!-- Title -->
+                <div class="mb-3"> <label> Title </label> <input type="text" class="form-control"
+                        formControlName="title" placeholder="Enter task title"> @if ( form.controls.title.invalid &&
+                    form.controls.title.touched ) { <div class="text-danger mt-1"> @if (
+                        form.controls.title.errors?.['required'] ) { <small> Title is required. </small> } @if (
+                        form.controls.title.errors?.['minlength'] ) { <small> Title must contain at least 3 characters.
+                        </small> } @if ( form.controls.title.errors?.['maxlength'] ) { <small> Title cannot exceed 100
+                            characters. </small> } </div> } </div> <!-- Description -->
+                <div class="mb-3"> <label> Description </label> <textarea class="form-control" rows="5"
+                        formControlName="description" placeholder="Enter task description"> </textarea> @if (
+                    form.controls.description.invalid && form.controls.description.touched ) { <div
+                        class="text-danger mt-1"> @if ( form.controls.description.errors?.['required'] ) { <small>
+                            Description is required. </small> } @if ( form.controls.description.errors?.['minlength'] )
+                        { <small> Description must contain at least 5 characters. </small> } @if (
+                        form.controls.description.errors?.['maxlength'] ) { <small> Description cannot exceed 1000
+                            characters. </small> } </div> } </div> <!-- Due Date -->
+                <div class="mb-3"> <label> Due Date </label> <input type="date" class="form-control"
+                        formControlName="dueDate"> @if ( form.controls.dueDate.invalid && form.controls.dueDate.touched
+                    ) { <div class="text-danger mt-1"> @if ( form.controls.dueDate.errors?.['required'] ) { <small> Due
+                            date is required. </small> } </div> } </div> <!-- Buttons -->
+                <div class="mt-4"> <button type="submit" class="btn btn-primary me-2" [disabled]="loading"> {{ loading ?
+                        'Creating...' : 'Create Task' }} </button> <a routerLink="/tasks" class="btn btn-secondary">
+                        Cancel </a> </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,124 @@
+<div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="historyModalLabel">
+
+                    Task History
+
+                </h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div *ngIf="loading" class="text-center py-4">
+
+                    <div class="spinner-border" role="status">
+
+                        <span class="visually-hidden">
+
+                            Loading...
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div *ngIf="
+            !loading &&
+            history.length === 0
+          " class="alert alert-info">
+
+                    No history available for this task.
+
+                </div>
+
+
+                <div *ngIf="
+            !loading &&
+            history.length > 0
+          ">
+
+                    <div *ngFor="let item of history" class="card mb-3">
+
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between
+                       align-items-center">
+
+                                <div>
+
+                                    <strong>
+
+                                        {{ item.previousStatus ?? 'Created' }}
+
+                                        →
+
+                                        {{ item.newStatus }}
+
+                                    </strong>
+
+                                </div>
+
+                                <small class="text-muted">
+
+                                    {{ item.changedAt | date:'medium' }}
+
+                                </small>
+
+                            </div>
+
+
+                            <hr>
+
+
+                            <div>
+
+                                <small class="text-muted">
+
+                                    Changed by:
+
+                                </small>
+
+                                <span class="ms-1">
+
+                                    {{ item.changedBy }}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+
+                    Close
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

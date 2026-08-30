@@ -19,6 +19,7 @@ public sealed class TaskItem
     public DateTime CreatedAt { get; private set; }
 
     public DateTime? UpdatedAt { get; private set; }
+    public ICollection<TaskHistory> History { get; private set; } = new List<TaskHistory>();
 
     private TaskItem(){}
 
