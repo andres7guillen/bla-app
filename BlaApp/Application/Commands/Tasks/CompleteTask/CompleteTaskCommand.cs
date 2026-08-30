@@ -1,5 +1,7 @@
-﻿namespace Application.Commands.Tasks.CompleteTask;
+﻿using CSharpFunctionalExtensions;
+using MediatR;
+
+namespace Application.Commands.Tasks.CompleteTask;
 
 public sealed record CompleteTaskCommand(
-    Guid TaskId,
-    Guid UserId);
+    Guid TaskId): IRequest<Result>;

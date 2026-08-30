@@ -1,5 +1,9 @@
-﻿namespace Application.Commands.Authentication.Register;
+﻿using CSharpFunctionalExtensions;
+using MediatR;
+
+namespace Application.Commands.Authentication.Register;
 
 public sealed record RegisterUserCommand(
     string Email,
-    string Password);
+    string Password)
+    : IRequest<Result<Guid>>;

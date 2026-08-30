@@ -1,8 +1,10 @@
-﻿namespace Application.Commands.Tasks.UpdateTask;
+﻿using CSharpFunctionalExtensions;
+using MediatR;
+
+namespace Application.Commands.Tasks.UpdateTask;
 
 public sealed record UpdateTaskCommand(
     Guid TaskId,
-    Guid UserId,
     string Title,
     string Description,
-    DateTime DueDate);
+    DateTime DueDate) : IRequest<Result>;

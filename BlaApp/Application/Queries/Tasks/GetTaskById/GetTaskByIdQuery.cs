@@ -1,5 +1,9 @@
-﻿namespace Application.Queries.Tasks.GetTaskById;
+﻿using Application.DTOs;
+using CSharpFunctionalExtensions;
+using MediatR;
+
+namespace Application.Queries.Tasks.GetTaskById;
 
 public sealed record GetTaskByIdQuery(
-Guid TaskId,
-Guid UserId);
+    Guid TaskId)
+    : IRequest<Maybe<TaskResponse>>;

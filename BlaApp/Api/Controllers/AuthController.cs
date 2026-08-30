@@ -1,6 +1,8 @@
 ﻿using Api.Models;
 using Application.Commands.Authentication.Login;
 using Application.Commands.Authentication.Register;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -9,37 +11,27 @@ namespace Api.Controllers;
 [Route("api/auth")]
 public sealed class AuthController : ControllerBase
 {
-    private readonly RegisterUserCommandHandler _registerHandler;
-    private readonly LoginCommandHandler _loginHandler;
+    private readonly IMediator _mediator;
 
-    public AuthController(
-        RegisterUserCommandHandler registerHandler,
-        LoginCommandHandler loginHandler)
+    public AuthController(IMediator mediator)
     {
-        _registerHandler = registerHandler;
-        _loginHandler = loginHandler;
+        _mediator = mediator;
     }
 
     [HttpPost("register")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [AllowAnonymous]
     public async Task<IActionResult> Register(
-        RegisterRequest request)
+        RegisterRequest request,
+        CancellationToken cancellationToken)
     {
-        var command = new RegisterUserCommand(
-            request.Email,
-            request.Password);
-
-        var result =
-            await _registerHandler.Handle(command);
+        var result = await _mediator.Send(
+            new RegisterUserCommand(
+                request.Email,
+                request.Password),
+            cancellationToken);
 
         if (result.IsFailure)
-        {
-            return BadRequest(new
-            {
-                error = result.Error
-            });
-        }
+            return BadRequest(result.Error);
 
         return StatusCode(
             StatusCodes.Status201Created,
@@ -50,25 +42,19 @@ public sealed class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(
-        LoginRequest request)
+        LoginRequest request,
+        CancellationToken cancellationToken)
     {
-        var command = new LoginCommand(
-            request.Email,
-            request.Password);
-
-        var result =
-            await _loginHandler.Handle(command);
+        var result = await _mediator.Send(
+            new LoginCommand(
+                request.Email,
+                request.Password),
+            cancellationToken);
 
         if (result.IsFailure)
-        {
-            return Unauthorized(new
-            {
-                error = result.Error
-            });
-        }
+            return Unauthorized(result.Error);
 
         return Ok(new
         {

@@ -1,5 +1,6 @@
-﻿namespace Application.Commands.Tasks.StartTask;
+﻿using CSharpFunctionalExtensions;
+using MediatR;
 
-public sealed record StartTaskCommand(
-  Guid TaskId,
-  Guid UserId);
+namespace Application.Commands.Tasks.StartTask;
+
+public sealed record StartTaskCommand(Guid TaskId): IRequest<Result>;

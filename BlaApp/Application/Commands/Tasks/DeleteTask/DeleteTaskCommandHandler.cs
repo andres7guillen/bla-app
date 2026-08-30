@@ -6,11 +6,13 @@ namespace Application.Commands.Tasks.DeleteTask;
 public sealed class DeleteTaskCommandHandler
 {
     private readonly ITaskRepository _repository;
-
+    private readonly ICurrentUser _currentUser;
     public DeleteTaskCommandHandler(
-        ITaskRepository repository)
+        ITaskRepository repository,
+        ICurrentUser currentUser)
     {
         _repository = repository;
+        _currentUser = currentUser;
     }
 
     public async Task<Result> Handle(
@@ -22,7 +24,7 @@ public sealed class DeleteTaskCommandHandler
             cancellationToken);
 
         if (task.Value is null ||
-            task.Value.UserId != command.UserId)
+            task.Value.UserId != _currentUser.UserId)
         {
             return Result.Failure("Task not found.");
         }
