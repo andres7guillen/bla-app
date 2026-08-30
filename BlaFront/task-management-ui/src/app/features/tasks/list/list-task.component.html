@@ -1,0 +1,230 @@
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center">
+
+        <h2>
+            Tasks
+        </h2>
+
+        <a routerLink="/tasks/create" class="btn btn-primary">
+
+            Create Task
+
+        </a>
+
+    </div>
+
+
+    <table class="table table-striped mt-3">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <th>
+                    Title
+                </th>
+
+                <th>
+                    Status
+                </th>
+
+                <th>
+                    Actions
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            <tr *ngFor="let task of tasks">
+
+                <td>
+                    {{ task.title }}
+                </td>
+
+
+                <td>
+
+                    <span class="badge" [ngClass]="getStatusClass(task.status)">
+
+                        {{ task.status }}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+
+                    <a [routerLink]="[
+              '/tasks',
+              task.id
+            ]" class="btn btn-info btn-sm me-2">
+
+                        Detail
+
+                    </a>
+
+
+
+                    <a *ngIf="canEdit(task)" [routerLink]="[
+              '/tasks',
+              task.id,
+              'edit'
+            ]" class="btn btn-warning btn-sm me-2">
+
+                        Edit
+
+                    </a>
+
+
+                    <button *ngIf="canStart(task)" type="button" class="btn btn-success btn-sm me-2"
+                        (click)="start(task)">
+
+                        Start
+
+                    </button>
+
+
+
+                    <button *ngIf="canComplete(task)" type="button" class="btn btn-success btn-sm me-2"
+                        (click)="complete(task)">
+
+                        Complete
+
+                    </button>
+
+
+
+                    <button *ngIf="canCancel(task)" type="button" class="btn btn-danger btn-sm me-2"
+                        (click)="cancel(task)">
+
+                        Cancel
+
+                    </button>
+
+
+                    @if (task.status === taskStatus.Pending) { <button type="button" class="btn btn-danger btn-sm me-2"
+                        (click)="delete(task)"> Delete </button> }
+
+
+                    <button type="button" class="btn btn-secondary btn-sm me-2" (click)="openHistory(task.id)">
+
+                        History
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+
+    @if (showHistoryModal) {
+
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true">
+
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Task History
+                    </h5>
+
+                    <button type="button" class="btn-close" (click)="closeHistory()">
+                    </button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    @if (history.length === 0) {
+
+                    <p class="text-muted">
+                        No history available for this task.
+                    </p>
+
+                    } @else {
+
+                    <div class="table-responsive">
+
+                        <table class="table table-striped">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Change at</th>
+                                    <th>Previous Status</th>
+                                    <th>New Status</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @for (item of history; track item.id) {
+
+                                <tr>
+
+                                    <td>
+                                        {{ item.changedAt| date:'short' }}
+                                    </td>
+
+                                    <td>
+                                        {{ item.previousStatus ?? '-' }}
+                                    </td>
+
+                                    <td>
+                                        {{ item.newStatus ?? '-' }}
+                                    </td>
+
+                                </tr>
+
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    }
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" (click)="closeHistory()">
+
+                        Close
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="modal-backdrop fade show" (click)="closeHistory()">
+    </div>
+
+    }
+
+</div>

@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Persistance;
 using CSharpFunctionalExtensions;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.Commands.Tasks.StartTask;
@@ -34,10 +35,22 @@ public sealed class StartTaskCommandHandler : IRequestHandler<StartTaskCommand, 
                 "Task not found.");
         }
 
+        var previousStatus = task.Value.Status;
         var result = task.Value.Start();
 
         if (result.IsFailure)
             return result;
+
+        var historyResult =
+            TaskHistory.Create(
+                task.Value.Id,
+                previousStatus.ToString(),
+                task.Value.Status.ToString(),
+                _currentUser.UserId);
+
+        await _context.TaskHistories.AddAsync(
+            historyResult,
+            cancellationToken);
 
         await _context.SaveChangesAsync(
             cancellationToken);

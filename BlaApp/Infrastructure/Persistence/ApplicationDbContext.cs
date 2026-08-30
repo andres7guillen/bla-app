@@ -10,6 +10,7 @@ namespace Infrastructure.Persistence;
 public sealed class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>,IApplicationDbContext
 {
     public DbSet<TaskItem> Tasks => Set<TaskItem>();
+    public DbSet<TaskHistory> TaskHistories => Set<TaskHistory>();
 
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options)

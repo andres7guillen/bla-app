@@ -6,6 +6,7 @@ using Application.Commands.Tasks.DeleteTask;
 using Application.Commands.Tasks.StartTask;
 using Application.Commands.Tasks.UpdateTask;
 using Application.Queries.Tasks.GetTaskById;
+using Application.Queries.Tasks.GetTaskHistory;
 using Application.Queries.Tasks.GetTasks;
 using CSharpFunctionalExtensions;
 using MediatR;
@@ -53,6 +54,26 @@ public sealed class TasksController : ControllerBase
 
         if (result.HasNoValue)
             return NotFound();
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet("{id:guid}/history")]
+    public async Task<IActionResult> GetHistory(
+    Guid id,
+    CancellationToken cancellationToken)
+    {
+
+        var result = await _mediator.Send(
+            new GetTaskHistoryQuery(
+                id),
+            cancellationToken);
+
+        if (result.HasNoValue)
+        {
+            return NotFound(
+                "Task not found.");
+        }
 
         return Ok(result.Value);
     }
