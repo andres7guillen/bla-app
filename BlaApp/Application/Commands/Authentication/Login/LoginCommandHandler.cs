@@ -1,9 +1,11 @@
 ﻿using Application.Interfaces.Auth;
 using CSharpFunctionalExtensions;
+using MediatR;
 
 namespace Application.Commands.Authentication.Login;
 
 public sealed class LoginCommandHandler
+    : IRequestHandler<LoginCommand, Result<string>>
 {
     private readonly IIdentityService _identityService;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
@@ -17,34 +19,23 @@ public sealed class LoginCommandHandler
     }
 
     public async Task<Result<string>> Handle(
-        LoginCommand command)
+        LoginCommand command,
+        CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(command.Email))
-        {
-            return Result.Failure<string>(
-                "Invalid credentials.");
-        }
-
-        if (string.IsNullOrWhiteSpace(command.Password))
-        {
-            return Result.Failure<string>(
-                "Invalid credentials.");
-        }
-
         var result =
             await _identityService.ValidateCredentialsAsync(
-                command.Email.Trim(),
+                command.Email,
                 command.Password);
 
         if (result.IsFailure)
         {
             return Result.Failure<string>(
-                result.Error);
+                "Invalid credentials.");
         }
 
         var token = _jwtTokenGenerator.GenerateToken(
             result.Value,
-            command.Email.Trim());
+            command.Email);
 
         return Result.Success(token);
     }

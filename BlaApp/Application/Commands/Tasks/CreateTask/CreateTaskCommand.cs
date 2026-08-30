@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CSharpFunctionalExtensions;
+using MediatR;
 
 namespace Application.Commands.Tasks.CreateTask;
 
 public sealed record CreateTaskCommand(
-    Guid UserId,
     string Title,
     string Description,
-    DateTime DueDate);
+    DateTime DueDate)
+    : IRequest<Result<Guid>>;

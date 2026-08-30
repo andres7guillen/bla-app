@@ -1,4 +1,7 @@
-﻿namespace Application.Queries.Tasks.GetTasks;
+﻿using Application.DTOs;
+using MediatR;
 
-public sealed record GetTasksQuery(
-    Guid UserId);
+namespace Application.Queries.Tasks.GetTasks;
+
+public sealed record GetTasksQuery
+    : IRequest<IReadOnlyList<TaskResponse>>;

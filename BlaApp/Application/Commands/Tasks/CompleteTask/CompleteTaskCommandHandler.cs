@@ -1,16 +1,23 @@
 ﻿using Application.Interfaces.Persistance;
 using CSharpFunctionalExtensions;
+using MediatR;
 
 namespace Application.Commands.Tasks.CompleteTask;
 
 public sealed class CompleteTaskCommandHandler
+    : IRequestHandler<CompleteTaskCommand, Result>
 {
     private readonly ITaskRepository _repository;
-
+    private readonly IApplicationDbContext _context;
+    private readonly ICurrentUser _currentUser;
     public CompleteTaskCommandHandler(
-        ITaskRepository repository)
+        ITaskRepository repository,
+        IApplicationDbContext context,
+        ICurrentUser currentUser)
     {
         _repository = repository;
+        _context = context;
+        _currentUser = currentUser;
     }
 
     public async Task<Result> Handle(
@@ -21,12 +28,21 @@ public sealed class CompleteTaskCommandHandler
             command.TaskId,
             cancellationToken);
 
-        if (task.Value is null)
-            return Result.Failure("Task not found.");
+        if (task.Value is null ||
+            task.Value.UserId != _currentUser.UserId)
+        {
+            return Result.Failure(
+                "Task not found.");
+        }
 
-        if (task.Value.UserId != command.UserId)
-            return Result.Failure("Task not found.");
+        var result = task.Value.Complete();
 
-        return task.Value.Complete();
+        if (result.IsFailure)
+            return result;
+
+        await _context.SaveChangesAsync(
+            cancellationToken);
+
+        return Result.Success();
     }
 }

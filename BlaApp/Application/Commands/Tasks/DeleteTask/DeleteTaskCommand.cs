@@ -1,5 +1,8 @@
-﻿namespace Application.Commands.Tasks.DeleteTask;
+﻿using CSharpFunctionalExtensions;
+using MediatR;
+
+namespace Application.Commands.Tasks.DeleteTask;
 
 public sealed record DeleteTaskCommand(
-Guid TaskId,
-Guid UserId);
+    Guid TaskId)
+    : IRequest<Result>;

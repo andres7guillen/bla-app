@@ -1,5 +1,6 @@
-﻿namespace Application.Commands.Tasks.CancelTask;
+﻿using CSharpFunctionalExtensions;
+using MediatR;
 
-public sealed record CancelTaskCommand(
-Guid TaskId,
-Guid UserId);
+namespace Application.Commands.Tasks.CancelTask;
+
+public sealed record CancelTaskCommand(Guid TaskId): IRequest<Result>;
